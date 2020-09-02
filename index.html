@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<head>
+    <title>HTML5 Audio Tutorial</title>
+    
+
+    <link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/3.3.0/build/cssreset/reset-min.css">
+    <link href='http://fonts.googleapis.com/css?family=Lobster' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+    <link rel="stylesheet" type="text/css" href="arrange.css">
+    <script src="http://code.jQuery.com/jQuery-latest.js" type="text/javascript"></script>
+    <script type="text/javascript" src="js/js.js"></script>
+    <script type="text/javascript" src="js/html5slider.js"></script>
+
+    <script type="text/javascript">
+        container = $('.container');
+    cover = $('.cover');
+    play = $('#play');
+    pause = $('#pause');
+    mute = $('#mute');
+    muted = $('#muted');
+    close = $('#close');
+    song = new Audio('music/track1.ogg','music/track1.mp3');
+    duration = song.duration; if (song.canPlayType('audio/mpeg;')) {
+    song.type= 'audio/mpeg';
+    song.src= 'music/track1.mp3';
+    } else {
+    song.type= 'audio/ogg';
+    song.src= 'music/track1.ogg';
+    }play.live('click', function(e) {
+        e.preventDefault();
+        song.play();
+
+        $(this).replaceWith('<a class="button gradient" id="pause" href="" title=""></a>');
+        container.addClass('containerLarge');
+        cover.addClass('coverLarge');
+        $('#close').fadeIn(300);
+        $('#seek').attr('max',song.duration);
+    });
+
+    pause.live('click', function(e) {
+        e.preventDefault();
+        song.pause();
+        $(this).replaceWith('<a class="button gradient" id="play" href="" title=""></a>');
+
+    });
+
+The mute and muted buttons work similarly to the play and pause buttons, but call the related actions and replace the buttons with the appropriate alternatives.
+
+    mute.live('click', function(e) {
+        e.preventDefault();
+        song.volume = 0;
+        $(this).replaceWith('<a class="button gradient" id="muted" href="" title=""></a>');
+
+    });
+
+    muted.live('click', function(e) {
+        e.preventDefault();
+        song.volume = 1;
+        $(this).replaceWith('<a class="button gradient" id="mute" href="" title=""></a>');
+
+    });$('#close').click(function(e) {
+        e.preventDefault();
+        container.removeClass('containerLarge');
+        cover.removeClass('coverLarge');
+        song.pause();
+        song.currentTime = 0;
+        $('#pause').replaceWith('<a class="button gradient" id="play" href="" title=""></a>');
+        $('#close').fadeOut(300);
+    });$("#seek").bind("change", function() {
+        song.currentTime = $(this).val();
+        $("#seek").attr("max", song.duration);
+    });song.addEventListener('timeupdate',function (){
+    curtime = parseInt(song.currentTime, 10);
+        $("#seek").attr("value", curtime);
+    });
+    </script>
+
+</head>
+<body>
+ 
+    <h1>HTML 5 Audio Player</h1>
+ 
+    <div class="container gradient">
+         
+        <img class="cover" src="images/cover.jpg" alt="">
+ 
+        <div class="player gradient">
+ 
+            <a class="button gradient" id="play" href="" title=""></a>
+            <a class="button gradient" id="mute" href="" title=""></a>
+         
+                <input type="range" id="seek" value="0" max=""/>
+     
+            <a class="button gradient" id="close" href="" title=""></a>
+             
+        </div><!-- / player -->
+         
+    </div><!-- / Container-->
+</body>
+</html>
